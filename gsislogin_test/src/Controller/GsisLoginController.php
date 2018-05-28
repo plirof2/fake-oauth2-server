@@ -165,6 +165,7 @@ class GsisLoginController extends ControllerBase {
       try {
         // TODO check fields.'&fields=id,name,emails';.
         $getuserurl = $this->userinfoUrl . "?format=xml&access_token=" . $this->tokenarray['access_token'];
+        drupal_set_message("USERINFO: getuserurl = this->userinfoUrl =".$getuserurl);
         $userxml = $this->httpClient->get(
         $getuserurl, [
           'headers' => [

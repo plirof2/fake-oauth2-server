@@ -19,8 +19,10 @@ const EXPECTED_CLIENT_SECRET = process.env.EXPECTED_CLIENT_SECRET || "dummy-clie
 const AUTH_REQUEST_PATH = process.env.AUTH_REQUEST_PATH || "/o/oauth2/v2/auth";
 const ACCESS_TOKEN_REQUEST_PATH = process.env.ACCESS_TOKEN_REQUEST_PATH || "/oauth2/v4/token";
 const USERINFO_REQUEST_URL = process.env.TOKENINFO_REQUEST_URL || "/oauth2/v3/userinfo";
+//const USERINFO_REQUEST_URL = process.env.USERINFO_REQUEST_URL || "/oauth2/v3/userinfo";
 const TOKENINFO_REQUEST_URL = process.env.TOKENINFO_REQUEST_URL || "/oauth2/v3/tokeninfo";
 const PERMITTED_REDIRECT_URLS = process.env.PERMITTED_REDIRECT_URLS ? process.env.PERMITTED_REDIRECT_URLS.split(",") : ["http://localhost:8181/auth/login"];
+//const PERMITTED_REDIRECT_URLS = ["http://localhost/drupal84/gsis"];
 
 const code2token = {};
 const authHeader2personData = {};
@@ -32,7 +34,7 @@ function now() {
 }
 
 function errorMsg(descr, expected, actual) {
-  return "expected " + descr + ": " + expected + ", actual: " + actual;
+  return "expected ZZZZZ" + descr + ": " + expected + ", actual: " + actual;
 }
 
 function validateClientId(actualClientId, res) {
@@ -61,7 +63,7 @@ function validateAuthRequest(req, res) {
     }
     if (req.query.redirect_uri && ! _.contains(PERMITTED_REDIRECT_URLS, req.query.redirect_uri)) {
       res.writeHead(401, {
-        "X-Debug" : errorMsg("redirect_uri", "one of " + permittedRedirectURLs(), req.query.redirect_uri)
+        "X-Debug" : errorMsg("redirect_uriZZZZZZZZ", "one of " + permittedRedirectURLs(), req.query.redirect_uri)
       });
       return false;
     }
@@ -113,10 +115,12 @@ function validateAccessTokenRequest(req, res) {
     success = false;
     msg = errorMsg("client_secret", EXPECTED_CLIENT_SECRET, req.body.client_secret);
   }
+  /* // JON : why do I compare session to POST body - I should compare BODY with STORED allowed URL
   if (req.session.redirect_uri !== req.body.redirect_uri) {
     success = false;
-    msg = errorMsg("redirect_uri", req.session.redirect_uri, req.body.redirect_uri);
+    msg = errorMsg("redirect_uriAAAAAAAA req.session.redirect_uri="+req.session.redirect_uri +"req.body.redirect_uri"+req.body.redirect_uri, req.session.redirect_uri, req.body.redirect_uri);
   }
+  */
   if (!success) {
     const params = {};
     if (msg) {
@@ -159,6 +163,7 @@ app.use(session({
 function authRequestHandler(req, res) {
   if (validateAuthRequest(req, res)) {
     req.session.redirect_uri = req.query.redirect_uri;
+    console.log("000000000163OOOOOOOOOOOOOOO function authRequestHandler="+req.session.redirect_uri);
     if (req.query.state) {
       req.session.client_state = req.query.state;
     }
@@ -184,6 +189,7 @@ app.get("/login-as", (req, res) => {
 });
 
 app.post(ACCESS_TOKEN_REQUEST_PATH, (req, res) => {
+  console.log("ACCESS_TOKEN_REQUEST_PATH app.post(ACCESS_TOKEN_REQUEST_PATH,="+req.session.redirect_uri);
   if (validateAccessTokenRequest(req, res)) {
     const code = req.body.code;
     const token = code2token[code];
@@ -196,9 +202,10 @@ app.post(ACCESS_TOKEN_REQUEST_PATH, (req, res) => {
 });
 
 app.get(USERINFO_REQUEST_URL, (req, res) => {
+  console.log("USERINFO_REQUEST_UR userinfo response UUUUUUUUUUUUUUUU");
   const token_info = authHeader2personData[req.headers["authorization"]];
   if (token_info !== undefined) {
-    console.log("userinfo response", token_info);
+    console.log("userinfo response UUUUUUUUUUUUUUUU", token_info);
     res.send(token_info);
   } else {
     res.status(404);
@@ -233,6 +240,7 @@ module.exports = {
   EXPECTED_CLIENT_ID: EXPECTED_CLIENT_ID,
   EXPECTED_CLIENT_SECRET: EXPECTED_CLIENT_SECRET,
   AUTH_REQUEST_PATH : AUTH_REQUEST_PATH,
+  USERINFO_REQUEST_URL : USERINFO_REQUEST_URL,
   ACCESS_TOKEN_REQUEST_PATH : ACCESS_TOKEN_REQUEST_PATH,
   PERMITTED_REDIRECT_URLS : PERMITTED_REDIRECT_URLS,
   permittedRedirectURLs: permittedRedirectURLs
