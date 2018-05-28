@@ -78,7 +78,7 @@ class GsisLoginController extends ControllerBase {
       $this->authorizeUrl = 'https://www1.gsis.gr/oauth2server/oauth/authorize';
 */
       $this->tokenUrl = 'http://localhost:8282/oauth2/v4/token';
-      $this->userinfoUrl = 'http://localhost:8282/oauth2/v3/userinfo';
+      $this->userinfoUrl = 'http://localhost:8282/o/oauth2/v2/userinfo';
       $this->authorizeUrl = 'http://localhost:8282/o/oauth2/v2/auth';
 
 
@@ -180,14 +180,11 @@ class GsisLoginController extends ControllerBase {
         if ($checkerror !== NULL) {
           return ['#markup' => $this->t("ERR: 005 Data collection problem from the General Secretariat of Information Systems.")];
         }
-        drupal_set_message("XML=".$userxml);
+
         $xml = simplexml_load_string($userxml);
-        
-drupal_set_message('AAAAAAAAAAA DECODE'.($userxml));
-        $userid = $xml->userid;
-        $taxid = $xml->taxid;
-        //$taxid = $xml->userinfo['taxid'][0]->__toString();
-        /*
+
+        $userid = $xml->userinfo['userid'][0]->__toString();
+        $taxid = $xml->userinfo['taxid'][0]->__toString();
         $lastname = $xml->userinfo['lastname'][0]->__toString();
         $firstname = $xml->userinfo['firstname'][0]->__toString();
         $fathername = $xml->userinfo['fathername'][0]->__toString();
@@ -202,15 +199,6 @@ drupal_set_message('AAAAAAAAAAA DECODE'.($userxml));
           "fathername" => $fathername,
           "mothername" => $mothername,
           "birthyear" => $birthyear,
-        ];*/
-        $userDetails = [
-          "userid" =>$userid,
-          "taxid" => $taxid,
-          "lastname" => "aaaa2222",
-          "firstname" => "aaaa2222",
-          "fathername" => "aaaa2222",
-          "mothername" => "aaaa2222",
-          "birthyear" => "20101010",
         ];
 
         $this->createUser($userDetails);

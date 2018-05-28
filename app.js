@@ -19,7 +19,7 @@ const EXPECTED_CLIENT_SECRET = process.env.EXPECTED_CLIENT_SECRET || "dummy-clie
 const AUTH_REQUEST_PATH = process.env.AUTH_REQUEST_PATH || "/o/oauth2/v2/auth";
 const ACCESS_TOKEN_REQUEST_PATH = process.env.ACCESS_TOKEN_REQUEST_PATH || "/oauth2/v4/token";
 const USERINFO_REQUEST_URL = process.env.TOKENINFO_REQUEST_URL || "/oauth2/v3/userinfo";
-//const USERINFO_REQUEST_URL = process.env.USERINFO_REQUEST_URL || "/oauth2/v3/userinfo";
+//const USERINFO_REQUEST_URL = process.env.USERINFO_REQUEST_URL || "/oauth2/v3/userinfo"; /o/oauth2/v2/userinfo
 const TOKENINFO_REQUEST_URL = process.env.TOKENINFO_REQUEST_URL || "/oauth2/v3/tokeninfo";
 const PERMITTED_REDIRECT_URLS = process.env.PERMITTED_REDIRECT_URLS ? process.env.PERMITTED_REDIRECT_URLS.split(",") : ["http://localhost:8181/auth/login"];
 //const PERMITTED_REDIRECT_URLS = ["http://localhost/drupal84/gsis"];
@@ -142,7 +142,8 @@ function createToken(name, email, expires_in, client_state) {
     refresh_token: refreshtoken,
     id_token: id_token,
     state: client_state,
-    token_type: "Bearer"
+    token_type: "Bearer",
+    name: name
   };
   id_token2personData[id_token] = authHeader2personData["Bearer " + accesstoken] = {
     email: email,
@@ -202,8 +203,12 @@ app.post(ACCESS_TOKEN_REQUEST_PATH, (req, res) => {
 });
 
 app.get(USERINFO_REQUEST_URL, (req, res) => {
-  console.log("USERINFO_REQUEST_UR userinfo response UUUUUUUUUUUUUUUU");
+  
   const token_info = authHeader2personData[req.headers["authorization"]];
+  console.log("USERINFO_REQUEST_UR userinfo response UUUUUUUUUUUUUUUU token_info="+token_info);
+  //const aaa='    <?xml version="1.0"?>    <data>      <userid>"Tanmay"</userid>      <taxid>1234567890</taxid>  </data>';
+  const aaa='<?xml version="1.0"?><document> <userid>'+req.session.name+req.query.name+'</userid>      <taxid>1234567890</taxid></document>';
+  res.send(aaa); //JON
   if (token_info !== undefined) {
     console.log("userinfo response UUUUUUUUUUUUUUUU", token_info);
     res.send(token_info);
