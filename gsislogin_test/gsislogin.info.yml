@@ -1,0 +1,13 @@
+name: GSIS oauth2 Login
+type: module
+description: Allow sign-in with oauth2 gsis 
+package: Greek Goverment Services
+# core: 8.x
+'interface translation project': gsislogin
+'interface translation server pattern': modules/gsislogin/translations/%language.po
+
+# Information added by Drupal.org packaging script on 2018-04-13
+version: '8.x-1.1'
+core: '8.x'
+project: 'gsislogin'
+datestamp: 1523617090
