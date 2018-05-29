@@ -208,7 +208,7 @@ app.get(USERINFO_REQUEST_URL, (req, res) => {
   console.log("USERINFO_REQUEST_UR userinfo response UUUUUUUUUUUUUUUU token_info="+token_info);
   //const aaa='    <?xml version="1.0"?>    <data>      <userid>"Tanmay"</userid>      <taxid>1234567890</taxid>  </data>';
   //const my_response_xml='<?xml version="1.0"?><document> <userid>'+req.session.name+req.query.name+'</userid>      <taxid>1234567890</taxid></document>';
-  const my_response_xml='<root><userinfo userid="jackuser" taxid="123456789" lastname="ΓΙΩΡΓΟΣ" firstname="ΠΑΠΑΔΟΠΟΥΛΟΣ" fathername="ΜΑΝΩΛΗΣ" mothername="ΑΝΝΑ" birthyear="1951"</root>';
+  const my_response_xml='<root><userinfo userid="jackuser2" taxid="123456789" lastname="ΓΙΩΡΓΟΣ" firstname="ΠΑΠΑΔΟΠΟΥΛΟΣ" fathername="ΜΑΝΩΛΗΣ" mothername="ΑΝΝΑ" birthyear="1951" /></root>';
   res.send(my_response_xml); //JON
   if (token_info !== undefined) {
     console.log("userinfo response UUUUUUUUUUUUUUUU", token_info);
