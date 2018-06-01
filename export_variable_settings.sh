@@ -9,7 +9,7 @@ export ACCESS_TOKEN_REQUEST_PATH=/oauth2/v4/token
 export USERINFO_REQUEST_URL=/oauth2/v3/userinfo
 echo ">>>|The HTTP path of the [access token request](https://tools.ietf.org/html/rfc6749#section-4.1.3) which the fake server listens on|"
 #export PERMITTED_REDIRECT_URLS=http://localhost/drupal8test/gsis,http://localhost:8181/auth/login,http://localhost/drupal84/gsis
-export PERMITTED_REDIRECT_URLS=http://localhost/drupal84/gsis,http://localhost/formspde-test/oauth2/authorized,http://localhost/formspde-test/oauth2callback,http://localhost/formspde-test/gsis_callback
+export PERMITTED_REDIRECT_URLS=http://localhost/drupal84/gsis,http://localhost/formspde-test/oauth2/authorized,http://localhost/formspde-test/oauth2callback,http://localhost/formspde-test/gsis_callback,https://www.getpostman.com/oauth2/callback
 echo ">>>|comma-separated list of permitted [redirection endpoints]("
 
 node server.js
