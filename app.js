@@ -34,7 +34,7 @@ function now() {
 }
 
 function errorMsg(descr, expected, actual) {
-  return "expected ZZZZZ" + descr + ": " + expected + ", actual: " + actual;
+  return "errorMsg  : expected " + descr + ": " + expected + ", actual: " + actual;
 }
 
 function validateClientId(actualClientId, res) {
@@ -115,6 +115,7 @@ function validateAccessTokenRequest(req, res) {
     success = false;
     msg = errorMsg("client_secret", EXPECTED_CLIENT_SECRET, req.body.client_secret);
   }
+  console.log("===============================INSIDE step2.2.3 - function validateAccessTokenRequest(req, res)  ===============================");
   /* // JON : why do I compare session to POST body - I should compare BODY with STORED allowed URL
   if (req.session.redirect_uri !== req.body.redirect_uri) {
     success = false;
@@ -124,10 +125,14 @@ function validateAccessTokenRequest(req, res) {
   if (!success) {
     const params = {};
     if (msg) {
+      console.log("===============================INSIDE step2.2.4a - function validateAccessTokenRequest(req, res)  ===============================");
       params["X-Debug"] = msg;
     }
+    console.log("===============================INSIDE step2.2.4b - function validateAccessTokenRequest(req, res)  ===============================");
     res.writeHead(401, params);
+    console.log("===============================INSIDE step2.2.4b2 - function validateAccessTokenRequest(req, res)  ===============================");
   }
+  console.log("===============================INSIDE step2.2.4c - function validateAccessTokenRequest(req, res)  ===============================");
   return success;
 }
 
@@ -181,17 +186,22 @@ app.get(AUTH_REQUEST_PATH, authRequestHandler);
 
 app.get("/login-as", (req, res) => {
   const code = createToken(req.query.name, req.query.email, req.query.expires_in, req.session.client_state);
-  var location = req.session.redirect_uri + "?code=" + code;
+    var location = req.session.redirect_uri + "?code=" + code;
   if (req.session.client_state) {
     location += "&state=" + req.session.client_state;
   }
-  res.writeHead(307, {"Location": location});
+    res.writeHead(307, {"Location": location});
+  console.log("===============================INSIDE step2.1 - login-as ===============================");
   res.end();
+  console.log("===============================INSIDE step2.1b-end - login-as ===============================");
 });
+
+
 
 app.post(ACCESS_TOKEN_REQUEST_PATH, (req, res) => {
   console.log("ACCESS_TOKEN_REQUEST_PATH app.post(ACCESS_TOKEN_REQUEST_PATH,="+req.session.redirect_uri);
   if (validateAccessTokenRequest(req, res)) {
+    console.log("===============================INSIDE step2.2 - app.post(ACCESS_TOKEN_REQUEST_PATH ===============================");
     const code = req.body.code;
     const token = code2token[code];
     if (token !== undefined) {
@@ -199,6 +209,7 @@ app.post(ACCESS_TOKEN_REQUEST_PATH, (req, res) => {
       res.send(token);
     }
   }
+  console.log("===============================INSIDE step2.3 - app.post(ACCESS_TOKEN_REQUEST_PATH ===============================");
   res.end();
 });
 
