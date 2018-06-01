@@ -1,5 +1,7 @@
 "use strict";
 
+const util = require('util');
+
 const express = require("express");
 const morgan = require("morgan");
 const fs = require("fs");
@@ -129,6 +131,8 @@ function validateAccessTokenRequest(req, res) {
       params["X-Debug"] = msg;
     }
     console.log("===============================INSIDE step2.2.4b - function validateAccessTokenRequest(req, res)  ===============================");
+    //console.log("res="+res);
+    //console.log("res="+util.inspect(res, {showHidden: false, depth: null}))
     res.writeHead(401, params);
     console.log("===============================INSIDE step2.2.4b2 - function validateAccessTokenRequest(req, res)  ===============================");
   }
