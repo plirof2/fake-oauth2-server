@@ -11,5 +11,6 @@ echo ">>>|The HTTP path of the [access token request](https://tools.ietf.org/htm
 #export PERMITTED_REDIRECT_URLS=http://localhost/drupal8test/gsis,http://localhost:8181/auth/login,http://localhost/drupal84/gsis
 export PERMITTED_REDIRECT_URLS=http://localhost/drupal84/gsis,http://localhost/formspde-test/oauth2/authorized,http://localhost/formspde-test/oauth2callback,http://localhost/formspde-test/gsis_callback,https://www.getpostman.com/oauth2/callback
 echo ">>>|comma-separated list of permitted [redirection endpoints]("
-
+export USE_RANDOM_RESPONCES=1
+echo ">>>USE_RANDOM_RESPONCES =0 : returns whatever you have write on the oauth2 form input fields"
 node server.js
