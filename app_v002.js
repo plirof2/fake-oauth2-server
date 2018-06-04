@@ -188,20 +188,14 @@ function authRequestHandler(req, res) {
 
 app.get(AUTH_REQUEST_PATH, authRequestHandler);
 
-//Returns step2
 app.get("/login-as", (req, res) => {
-  req.session.username=req.query.name;
-  req.session.afm=req.query.submitted_afm;
-  req.session.lastname=req.query.submitted_lastname;
-  req.session.firstname=req.query.submitted_firstname;
-  //req.session.username=req.query.name;
   const code = createToken(req.query.name, req.query.email, req.query.expires_in, req.session.client_state);
     var location = req.session.redirect_uri + "?code=" + code;
   if (req.session.client_state) {
     location += "&state=" + req.session.client_state;
   }
     res.writeHead(307, {"Location": location});
-  console.log("===============================INSIDE step2.1 - login-as ==============================="+req.session.username +req.session.afm +req.session.lastname);
+  console.log("===============================INSIDE step2.1 - login-as ===============================");
   res.end();
   console.log("===============================INSIDE step2.1b-end - login-as ===============================");
 });
