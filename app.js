@@ -1,5 +1,7 @@
 "use strict";
 
+const use_random_res_values=1; //0= use what you've entered in form (=NO RANDOM)
+
 const util = require('util');
 
 const express = require("express");
@@ -30,6 +32,25 @@ const code2token = {};
 const authHeader2personData = {};
 const id_token2personData = {};
 
+
+//Random number generator
+//examples: random(10);         // returns "rkp6rt7EBc"
+// random(10, "ABBB"); // returns "BABBBBABAB"
+var crypto = require('crypto');
+function random (howMany, chars) {
+    chars = chars 
+        || "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
+    var rnd = crypto.randomBytes(howMany);
+    var value = new Array(howMany);
+    var len = Math.min(256, chars.length);
+    var d = 256 / len;
+
+    for (var i = 0; i < howMany; i++) {
+        value[i] = chars[Math.floor(rnd[i] / d)]
+    };
+
+    return value.join('');
+}
 
 function now() {
   return Math.round(new Date().valueOf() / 1000);
@@ -192,9 +213,13 @@ app.get(AUTH_REQUEST_PATH, authRequestHandler);
 app.get("/login-as", (req, res) => {
   session.username=req.query.name;
   session.afm=req.query.submitted_afm;
-
   session.lastname=req.query.submitted_lastname;
   session.firstname=req.query.submitted_firstname;
+
+  session.fathername=req.query.submitted_firstname; //DUMMY
+  session.mothername=req.query.submitted_firstname; //DUMMY
+  session.birthyear="1970"; //DUMMY
+
   console.log("########### 197 session_info="+session.username +session.afm +session.lastname);
   //session.username=req.query.name;
   const code = createToken(req.query.name, req.query.email, req.query.expires_in, req.session.client_state);
@@ -233,7 +258,19 @@ app.get(USERINFO_REQUEST_URL, (req, res) => {
   console.log("########### 230 session_info="+session.afm+session.username+session.afm+session.lastname);
   //const aaa='    <?xml version="1.0"?>    <data>      <userid>"Tanmay"</userid>      <taxid>1234567890</taxid>  </data>';
   //const my_response_xml='<?xml version="1.0"?><document> <userid>'+req.session.name+req.query.name+'</userid>      <taxid>1234567890</taxid></document>';
-  const my_response_xml='<root><userinfo userid="jackuser2" taxid="123456789" lastname="ΓΙΩΡΓΟΣ" firstname="ΠΑΠΑΔΟΠΟΥΛΟΣ" fathername="ΜΑΝΩΛΗΣ" mothername="ΑΝΝΑ" birthyear="1951" /></root>';
+  if(use_random_res_values!=0){
+  	//generate random values
+  	session.username="user"+random(10, "abcdefghijklmno");
+  	session.afm=+random(9, "123456789");
+  	session.lastname=random(10, "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤ");
+  	session.firstname=random(10, "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤ");
+  	session.birthyear="19"+random(2, "1234567");
+  	session.mothername="MAMA-"+random(10, "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤ");
+  	session.fathername="papa-"+random(10, "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤ");
+  }	
+
+
+  const my_response_xml='<root><userinfo userid="'+session.username+'" taxid="'+session.afm+'" lastname="'+session.lastname+'" firstname="'+session.firstname+'" fathername="'+session.fathername+'" mothername="'+session.mothername+'" birthyear="'+session.birthyear+'" /></root>';
   res.send(my_response_xml); //JON
   if (token_info !== undefined) {
     console.log("userinfo response UUUUUUUUUUUUUUUU", token_info);
