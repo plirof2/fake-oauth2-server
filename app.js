@@ -212,7 +212,7 @@ app.get("/login-as", (req, res) => {
 
 app.post(ACCESS_TOKEN_REQUEST_PATH, (req, res) => {
   console.log("ACCESS_TOKEN_REQUEST_PATH app.post(ACCESS_TOKEN_REQUEST_PATH,="+req.session.redirect_uri);
-  console.log("########### 213 session_info="+session.afm+session.username +session.afm +session.lastname);
+  console.log("########### 213 session_info="+session.afm+session.username+session.afm+session.lastname);
   if (validateAccessTokenRequest(req, res)) {
     console.log("===============================INSIDE step2.2 - app.post(ACCESS_TOKEN_REQUEST_PATH ===============================");
     const code = req.body.code;
@@ -230,7 +230,7 @@ app.get(USERINFO_REQUEST_URL, (req, res) => {
   
   const token_info = authHeader2personData[req.headers["authorization"]];
   console.log("USERINFO_REQUEST_UR userinfo response UUUUUUUUUUUUUUUU token_info="+token_info);
-  console.log("########### 230 session_info="+session.afm+session.username +session.afm +session.lastname);
+  console.log("########### 230 session_info="+session.afm+session.username+session.afm+session.lastname);
   //const aaa='    <?xml version="1.0"?>    <data>      <userid>"Tanmay"</userid>      <taxid>1234567890</taxid>  </data>';
   //const my_response_xml='<?xml version="1.0"?><document> <userid>'+req.session.name+req.query.name+'</userid>      <taxid>1234567890</taxid></document>';
   const my_response_xml='<root><userinfo userid="jackuser2" taxid="123456789" lastname="ΓΙΩΡΓΟΣ" firstname="ΠΑΠΑΔΟΠΟΥΛΟΣ" fathername="ΜΑΝΩΛΗΣ" mothername="ΑΝΝΑ" birthyear="1951" /></root>';
