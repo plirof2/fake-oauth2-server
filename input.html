@@ -23,13 +23,26 @@
             <h2>Create token & grant access</h2>
             <form action="/login-as">
                 <div class="form-group">
-                    <label for="name">Name of the resource owner (optional): </label>
-                    <input name="name" id="name" class="form-control" />
+                    <label for="name">Name of the resource owner USERNAME(optional): </label>
+                    <input name="name" id="name" class="form-control" value="testuser1" />
                 </div>
+                <div class="form-group">
+                    <label for="afm">return AFM: </label>
+                    <input name="submitted_afm" id="submitted_afm" class="form-control" value="123456789" />
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Name of the resource owner (optional): </label>
+                    <input name="submitted_lastname" id="submitted_lastname" class="form-control" value="lastname1" />
+                </div>
+                <div class="form-group">
+                    <label for="firstname">Name of the resource owner (optional): </label>
+                    <input name="submitted_firstname" id="submitted_firstname" class="form-control" value="firstname1" />
+                </div>                                
+
                 <div class="form-group">
                     <label for="email">Email of the resource owner (optional): </label>
                     <input type="email" class="form-control" placeholder="you@gmail.com"
-                           name="email" id="email"/>
+                           name="email" id="email" value="testuser1@example.com" />
                     <p class="help-block">Enter the email address of the person you want to impersonate.</p>
                 </div>
                 <div class="form-group">
