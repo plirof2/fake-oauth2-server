@@ -1,6 +1,6 @@
 "use strict";
 
-const use_random_res_values=1; //0= use what you've entered in form (=NO RANDOM)
+
 
 const util = require('util');
 
@@ -22,11 +22,12 @@ const EXPECTED_CLIENT_ID = process.env.EXPECTED_CLIENT_ID || "dummy-client-id";
 const EXPECTED_CLIENT_SECRET = process.env.EXPECTED_CLIENT_SECRET || "dummy-client-secret";
 const AUTH_REQUEST_PATH = process.env.AUTH_REQUEST_PATH || "/o/oauth2/v2/auth";
 const ACCESS_TOKEN_REQUEST_PATH = process.env.ACCESS_TOKEN_REQUEST_PATH || "/oauth2/v4/token";
-const USERINFO_REQUEST_URL = process.env.TOKENINFO_REQUEST_URL || "/oauth2/v3/userinfo";
+const USERINFO_REQUEST_URL = process.env.USERINFO_REQUEST_URL || "/oauth2/v3/userinfo";
 //const USERINFO_REQUEST_URL = process.env.USERINFO_REQUEST_URL || "/oauth2/v3/userinfo"; /o/oauth2/v2/userinfo
 const TOKENINFO_REQUEST_URL = process.env.TOKENINFO_REQUEST_URL || "/oauth2/v3/tokeninfo";
 const PERMITTED_REDIRECT_URLS = process.env.PERMITTED_REDIRECT_URLS ? process.env.PERMITTED_REDIRECT_URLS.split(",") : ["http://localhost:8181/auth/login"];
 //const PERMITTED_REDIRECT_URLS = ["http://localhost/drupal84/gsis"];
+const use_random_res_values=process.env.USE_RANDOM_RESPONCES || "0";; //values 0,1  : 0= use what you've entered in form (=NO RANDOM)
 
 const code2token = {};
 const authHeader2personData = {};
@@ -86,7 +87,7 @@ function validateAuthRequest(req, res) {
     }
     if (req.query.redirect_uri && ! _.contains(PERMITTED_REDIRECT_URLS, req.query.redirect_uri)) {
       res.writeHead(401, {
-        "X-Debug" : errorMsg("redirect_uriZZZZZZZZ", "one of " + permittedRedirectURLs(), req.query.redirect_uri)
+        "X-Debug" : errorMsg("redirect_uri", "one of " + permittedRedirectURLs(), req.query.redirect_uri)
       });
       return false;
     }
@@ -138,7 +139,7 @@ function validateAccessTokenRequest(req, res) {
     success = false;
     msg = errorMsg("client_secret", EXPECTED_CLIENT_SECRET, req.body.client_secret);
   }
-  console.log("===============================INSIDE step2.2.3 - function validateAccessTokenRequest(req, res)  ===============================");
+  //console.log("===============================INSIDE step2.2.3 - function validateAccessTokenRequest(req, res)  ===============================");
   /* // JON : why do I compare session to POST body - I should compare BODY with STORED allowed URL
   if (req.session.redirect_uri !== req.body.redirect_uri) {
     success = false;
@@ -148,16 +149,16 @@ function validateAccessTokenRequest(req, res) {
   if (!success) {
     const params = {};
     if (msg) {
-      console.log("===============================INSIDE step2.2.4a - function validateAccessTokenRequest(req, res)  ===============================");
+      //console.log("===============================INSIDE step2.2.4a - function validateAccessTokenRequest(req, res)  ===============================");
       params["X-Debug"] = msg;
     }
-    console.log("===============================INSIDE step2.2.4b - function validateAccessTokenRequest(req, res)  ===============================");
+    //console.log("===============================INSIDE step2.2.4b - function validateAccessTokenRequest(req, res)  ===============================");
     //console.log("res="+res);
     //console.log("res="+util.inspect(res, {showHidden: false, depth: null}))
     res.writeHead(401, params);
-    console.log("===============================INSIDE step2.2.4b2 - function validateAccessTokenRequest(req, res)  ===============================");
+    //console.log("===============================INSIDE step2.2.4b2 - function validateAccessTokenRequest(req, res)  ===============================");
   }
-  console.log("===============================INSIDE step2.2.4c - function validateAccessTokenRequest(req, res)  ===============================");
+  console.log("===============================INSIDE step2.2.4c - END of function validateAccessTokenRequest(req, res)  ===============================");
   return success;
 }
 
@@ -194,7 +195,7 @@ app.use(session({
 function authRequestHandler(req, res) {
   if (validateAuthRequest(req, res)) {
     req.session.redirect_uri = req.query.redirect_uri;
-    console.log("000000000163OOOOOOOOOOOOOOO function authRequestHandler="+req.session.redirect_uri);
+    console.log("called function authRequestHandler="+req.session.redirect_uri);
     if (req.query.state) {
       req.session.client_state = req.query.state;
     }
@@ -220,7 +221,7 @@ app.get("/login-as", (req, res) => {
   session.mothername=req.query.submitted_firstname; //DUMMY
   session.birthyear="1970"; //DUMMY
 
-  console.log("########### 197 session_info="+session.username +session.afm +session.lastname);
+  console.log("########### 224 session_info="+session.username +session.afm +session.lastname);
   //session.username=req.query.name;
   const code = createToken(req.query.name, req.query.email, req.query.expires_in, req.session.client_state);
     var location = req.session.redirect_uri + "?code=" + code;
@@ -228,16 +229,16 @@ app.get("/login-as", (req, res) => {
     location += "&state=" + req.session.client_state;
   }
     res.writeHead(307, {"Location": location});
-  console.log("===============================INSIDE step2.1 - login-as ==============================="+session.afm+session.username +session.afm +session.lastname);
+  console.log("232 ===============================INSIDE step2.1 - login-as ==============================="+session.afm+session.username +session.afm +session.lastname);
   res.end();
-  console.log("===============================INSIDE step2.1b-end - login-as ===============================");
+  //console.log("===============================INSIDE step2.1b-end - login-as ===============================");
 });
 
 
 
 app.post(ACCESS_TOKEN_REQUEST_PATH, (req, res) => {
   console.log("ACCESS_TOKEN_REQUEST_PATH app.post(ACCESS_TOKEN_REQUEST_PATH,="+req.session.redirect_uri);
-  console.log("########### 213 session_info="+session.afm+session.username+session.afm+session.lastname);
+  console.log("########### 241 session_info="+session.afm+session.username+session.afm+session.lastname);
   if (validateAccessTokenRequest(req, res)) {
     console.log("===============================INSIDE step2.2 - app.post(ACCESS_TOKEN_REQUEST_PATH ===============================");
     const code = req.body.code;
@@ -247,33 +248,33 @@ app.post(ACCESS_TOKEN_REQUEST_PATH, (req, res) => {
       res.send(token);
     }
   }
-  console.log("===============================INSIDE step2.3 - app.post(ACCESS_TOKEN_REQUEST_PATH ===============================");
+  //console.log("===============================INSIDE step2.3 - app.post(ACCESS_TOKEN_REQUEST_PATH ===============================");
   res.end();
 });
 
 app.get(USERINFO_REQUEST_URL, (req, res) => {
   
   const token_info = authHeader2personData[req.headers["authorization"]];
-  console.log("USERINFO_REQUEST_UR userinfo response UUUUUUUUUUUUUUUU token_info="+token_info);
-  console.log("########### 230 session_info="+session.afm+session.username+session.afm+session.lastname);
+  //console.log("USERINFO_REQUEST_UR userinfo response UUUUUUUUUUUUUUUU token_info="+token_info);
+  console.log("########### 259 session_info="+session.afm+session.username+session.afm+session.lastname);
   //const aaa='    <?xml version="1.0"?>    <data>      <userid>"Tanmay"</userid>      <taxid>1234567890</taxid>  </data>';
   //const my_response_xml='<?xml version="1.0"?><document> <userid>'+req.session.name+req.query.name+'</userid>      <taxid>1234567890</taxid></document>';
   if(use_random_res_values!=0){
   	//generate random values
-  	session.username="user"+random(10, "abcdefghijklmno");
-  	session.afm=+random(9, "123456789");
-  	session.lastname=random(10, "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤ");
-  	session.firstname=random(10, "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤ");
+  	session.username="user"+random(5, "abcdefghijklmno");
+  	session.afm=random(9, "123456789");
+  	session.lastname="last-"+random(10, "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤ");
+  	session.firstname="first-"+random(10, "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤ");
   	session.birthyear="19"+random(2, "1234567");
-  	session.mothername="MAMA-"+random(10, "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤ");
-  	session.fathername="papa-"+random(10, "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤ");
+  	session.mothername="mother-"+random(5, "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤ");
+  	session.fathername="father-"+random(5, "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤ");
   }	
 
 
   const my_response_xml='<root><userinfo userid="'+session.username+'" taxid="'+session.afm+'" lastname="'+session.lastname+'" firstname="'+session.firstname+'" fathername="'+session.fathername+'" mothername="'+session.mothername+'" birthyear="'+session.birthyear+'" /></root>';
   res.send(my_response_xml); //JON
   if (token_info !== undefined) {
-    console.log("userinfo response UUUUUUUUUUUUUUUU", token_info);
+    console.log("277 userinfo response UUUUUUUUUUUUUUUU", token_info);
     res.send(token_info);
   } else {
     res.status(404);
@@ -311,5 +312,6 @@ module.exports = {
   USERINFO_REQUEST_URL : USERINFO_REQUEST_URL,
   ACCESS_TOKEN_REQUEST_PATH : ACCESS_TOKEN_REQUEST_PATH,
   PERMITTED_REDIRECT_URLS : PERMITTED_REDIRECT_URLS,
+  USE_RANDOM_RESPONCES : USE_RANDOM_RESPONCES,
   permittedRedirectURLs: permittedRedirectURLs
 };

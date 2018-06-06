@@ -1,3 +1,18 @@
+
+# Fake taxis/gsis server
+Ψεύτικος σερβερ που προσπομιώνει Taxis/GSIS.
+Για να ξεκινήσετε τρέξτε από linux to run_server.sh
+
+## Default values :
+
+ - tokenUrl  =  	'http://localhost:8282/oauth2/v4/token';
+ - userinfoUrl  =  	'http://localhost:8282/oauth2/v3/userinfo';
+ - authorizeUrl  =  'http://localhost:8282/o/oauth2/v2/auth';
+ - redirectUri  =  	'http://localhost/drupal/gsis_callback';
+ - logoutUri  =  	'http://localhost:8282/['client_id']/?url=https://localhost/drupal/gsis_logout_callback';  //NOT implemnted yet
+
+
+
 # Fake OAuth2
 
 This project is an OAuth2 server implementation for testing purposes. See [RFC 6749](https://tools.ietf.org/html/rfc6749) .  
