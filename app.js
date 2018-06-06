@@ -27,7 +27,7 @@ const USERINFO_REQUEST_URL = process.env.USERINFO_REQUEST_URL || "/oauth2/v3/use
 const TOKENINFO_REQUEST_URL = process.env.TOKENINFO_REQUEST_URL || "/oauth2/v3/tokeninfo";
 const PERMITTED_REDIRECT_URLS = process.env.PERMITTED_REDIRECT_URLS ? process.env.PERMITTED_REDIRECT_URLS.split(",") : ["http://localhost:8181/auth/login"];
 //const PERMITTED_REDIRECT_URLS = ["http://localhost/drupal84/gsis"];
-const use_random_res_values=process.env.USE_RANDOM_RESPONCES || "0";; //values 0,1  : 0= use what you've entered in form (=NO RANDOM)
+const USE_RANDOM_RESPONCES=process.env.USE_RANDOM_RESPONCES || "0";; //values 0,1  : 0= use what you've entered in form (=NO RANDOM)
 
 const code2token = {};
 const authHeader2personData = {};
@@ -259,7 +259,7 @@ app.get(USERINFO_REQUEST_URL, (req, res) => {
   console.log("########### 259 session_info="+session.afm+session.username+session.afm+session.lastname);
   //const aaa='    <?xml version="1.0"?>    <data>      <userid>"Tanmay"</userid>      <taxid>1234567890</taxid>  </data>';
   //const my_response_xml='<?xml version="1.0"?><document> <userid>'+req.session.name+req.query.name+'</userid>      <taxid>1234567890</taxid></document>';
-  if(use_random_res_values!=0){
+  if(USE_RANDOM_RESPONCES!=0){
   	//generate random values
   	session.username="user"+random(5, "abcdefghijklmno");
   	session.afm=random(9, "123456789");
