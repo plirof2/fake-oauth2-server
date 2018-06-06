@@ -40,7 +40,10 @@
                 </div>                                
                 <div class="form-group">
                     <label for="randomresponces">Do you want random generated userdata (0=no ,1=yes): </label>
-                    <input name="submitted_randomresponces" id="submitted_randomresponces" class="form-control" value="0" />
+                    <select name="submitted_randomresponces" id="submitted_randomresponces" class="form-control" >
+                      <option value="0">return the data above (0, no random)</option>
+                      <option value="1">generate random userdata (1)</option>
+                    </select>
                 </div> 
                 <div class="form-group">
                     <label for="email">Email of the resource owner (optional): </label>
