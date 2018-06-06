@@ -221,6 +221,7 @@ app.get("/login-as", (req, res) => {
   session.fathername=req.query.submitted_firstname; //DUMMY
   session.mothername=req.query.submitted_firstname; //DUMMY
   session.birthyear="1970"; //DUMMY
+  session.randomresponces=req.query.submitted_randomresponces;
 
   console.log("########### 224 session_info="+session.username +session.afm +session.lastname);
   //session.username=req.query.name;
@@ -260,7 +261,7 @@ app.get(USERINFO_REQUEST_URL, (req, res) => {
   console.log("########### 259 session_info="+session.afm+session.username+session.afm+session.lastname);
   //const aaa='    <?xml version="1.0"?>    <data>      <userid>"Tanmay"</userid>      <taxid>1234567890</taxid>  </data>';
   //const my_response_xml='<?xml version="1.0"?><document> <userid>'+req.session.name+req.query.name+'</userid>      <taxid>1234567890</taxid></document>';
-  if(USE_RANDOM_RESPONCES!=0){
+  if(USE_RANDOM_RESPONCES==1 || session.randomresponces==1 ){
   	//generate random values
   	session.username="user"+random(5, "abcdefghijklmno");
   	session.afm=random(9, "123456789");
