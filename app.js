@@ -18,16 +18,17 @@ const app = express();
 app.use(morgan(":method :url :status Authorization: :req[authorization] Debug info: :res[x-debug] Redirect: :res[location]"));
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const EXPECTED_CLIENT_ID = process.env.EXPECTED_CLIENT_ID || "dummy-client-id";
-const EXPECTED_CLIENT_SECRET = process.env.EXPECTED_CLIENT_SECRET || "dummy-client-secret";
-const AUTH_REQUEST_PATH = process.env.AUTH_REQUEST_PATH || "/o/oauth2/v2/auth";
+const EXPECTED_CLIENT_ID      = process.env.EXPECTED_CLIENT_ID || "dummy-client-id";
+const EXPECTED_CLIENT_SECRET  = process.env.EXPECTED_CLIENT_SECRET || "dummy-client-secret";
+const AUTH_REQUEST_PATH       = process.env.AUTH_REQUEST_PATH || "/o/oauth2/v2/auth";
 const ACCESS_TOKEN_REQUEST_PATH = process.env.ACCESS_TOKEN_REQUEST_PATH || "/oauth2/v4/token";
-const USERINFO_REQUEST_URL = process.env.USERINFO_REQUEST_URL || "/oauth2/v3/userinfo";
+const USERINFO_REQUEST_URL    = process.env.USERINFO_REQUEST_URL || "/oauth2/v3/userinfo";
 //const USERINFO_REQUEST_URL = process.env.USERINFO_REQUEST_URL || "/oauth2/v3/userinfo"; /o/oauth2/v2/userinfo
-const TOKENINFO_REQUEST_URL = process.env.TOKENINFO_REQUEST_URL || "/oauth2/v3/tokeninfo";
+const TOKENINFO_REQUEST_URL   = process.env.TOKENINFO_REQUEST_URL || "/oauth2/v3/tokeninfo";
 const PERMITTED_REDIRECT_URLS = process.env.PERMITTED_REDIRECT_URLS ? process.env.PERMITTED_REDIRECT_URLS.split(",") : ["http://localhost:8181/auth/login"];
 //const PERMITTED_REDIRECT_URLS = ["http://localhost/drupal84/gsis"];
-const USE_RANDOM_RESPONCES=process.env.USE_RANDOM_RESPONCES || "0";; //values 0,1  : 0= use what you've entered in form (=NO RANDOM)
+const USE_RANDOM_RESPONCES    =process.env.USE_RANDOM_RESPONCES || "0"; //values 0,1  : 0= use what you've entered in form (=NO RANDOM)
+const REQUEST_LOGOUT_URL      =process.env.REQUEST_LOGOUT_URL || "/oauth2server/logout/";
 
 const code2token = {};
 const authHeader2personData = {};
@@ -295,6 +296,30 @@ app.get(TOKENINFO_REQUEST_URL, (req, res) => {
     res.status(404);
     res.send("token not found by id_token " + req.query.id_token);
   }
+  res.end();
+});
+
+//app.get(REQUEST_LOGOUT_URL+'/dummy-client-id/', (req, res) => {
+app.get('/oauth2server/logout/dummy-client-id/', (req, res) => {  
+  /*
+  if (req.query.id_token == null) {
+      res.status(400)
+      res.send("missing id_token query parameter");
+  }
+  const token_info = id_token2personData[req.query.id_token];
+  if (token_info !== undefined) {
+    res.status(200);
+    res.send(token_info);
+  } else {
+    res.status(404);
+    res.send("token not found by id_token " + req.query.id_token);
+  }
+  */
+  console.log("HIT logout "+req.query.url);
+  var location = req.query.url;
+  res.writeHead(307, {"Location": location});
+  //res.send('hello from logout'); //JON
+  
   res.end();
 });
 
