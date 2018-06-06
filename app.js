@@ -276,7 +276,7 @@ app.get(USERINFO_REQUEST_URL, (req, res) => {
   const my_response_xml='<root><userinfo userid="'+session.username+'" taxid="'+session.afm+'" lastname="'+session.lastname+'" firstname="'+session.firstname+'" fathername="'+session.fathername+'" mothername="'+session.mothername+'" birthyear="'+session.birthyear+'" /></root>';
   res.send(my_response_xml); //JON
   if (token_info !== undefined) {
-    console.log("277 userinfo response UUUUUUUUUUUUUUUU", token_info);
+    //console.log("277 userinfo response UUUUUUUUUUUUUUUU", token_info);
     res.send(token_info);
   } else {
     res.status(404);
@@ -300,8 +300,8 @@ app.get(TOKENINFO_REQUEST_URL, (req, res) => {
   res.end();
 });
 
-//app.get(REQUEST_LOGOUT_URL+'/dummy-client-id/', (req, res) => {
-app.get('/oauth2server/logout/dummy-client-id/', (req, res) => {  
+app.get(REQUEST_LOGOUT_URL+EXPECTED_CLIENT_ID+'/', (req, res) => {
+//app.get('/oauth2server/logout/dummy-client-id/', (req, res) => {  
   /*
   if (req.query.id_token == null) {
       res.status(400)
