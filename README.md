@@ -1,7 +1,9 @@
 
 # Fake taxis/gsis server
+This is a modification of https://github.com/patientsknowbest/fake-oauth2-server to fit a specific scenario: the emulation of Greek gsis soauth2 server.
 Ψεύτικος σερβερ που προσπομιώνει Taxis/GSIS.
 Για να ξεκινήσετε τρέξτε από linux to run_server.sh
+
 
 ## Default values :
 
@@ -14,7 +16,7 @@
 
 
 # Fake OAuth2
-
+(initial version : https://github.com/patientsknowbest/fake-oauth2-server)
 This project is an OAuth2 server implementation for testing purposes. See [RFC 6749](https://tools.ietf.org/html/rfc6749) .  
 
 It is useful for you if you are developing an OAuth2 client application and want to stub the server for testing purposes.
