@@ -1,7 +1,7 @@
 
 # Fake taxis/gsis server
 This is a modification of https://github.com/patientsknowbest/fake-oauth2-server to fit a specific scenario: the emulation of Greek gsis soauth2 server.
-Ψεύτικος σερβερ που προσπομιώνει Taxis/GSIS.
+Ψεύτικος σερβερ που προσομιώνει Taxis/GSIS.
 Για να ξεκινήσετε τρέξτε από linux to run_server.sh
 
 
